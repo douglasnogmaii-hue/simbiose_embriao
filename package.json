@@ -1,5 +1,5 @@
 {
-  "name": "simbiose-embrião",
+  "name": "simbiose_embriao",
   "version": "1.0.0",
   "description": "App Embryon para integração com ChatGPT",
   "main": "appmain.js",
