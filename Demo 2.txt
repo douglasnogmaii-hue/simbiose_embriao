@@ -1,0 +1,3 @@
+Este é o segundo teste.  
+Aqui o embrião deve detectar diferenças sutis e processar o texto como uma nova entrada.  
+Cada ingestão é uma simulação independente.

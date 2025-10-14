@@ -1,0 +1,3 @@
+Este é o primeiro teste de ingestão.  
+O embrião deve reconhecer este texto como um exemplo inicial.  
+O conteúdo é simples, apenas para validar o fluxo de leitura e persistência.

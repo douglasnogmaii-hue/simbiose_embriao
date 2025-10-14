@@ -1,0 +1,3 @@
+Este é o quarto texto de demonstração para a simbiose.
+Contém conceitos, ideias e pequenas diferenças em relação aos demos anteriores.
+O embrião deve reconhecer o padrão de aprendizado e processar como uma nova entrada.

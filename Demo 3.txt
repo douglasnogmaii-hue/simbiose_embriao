@@ -1,0 +1,3 @@
+Terceiro teste da simbiose.  
+O embrião precisa registrar este texto separadamente dos outros.  
+Se funcionar, significa que o módulo de ingestão múltipla está consolidado.
