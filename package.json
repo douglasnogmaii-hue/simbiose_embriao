@@ -1,12 +1,14 @@
 {
   "name": "simbiose_embriao",
   "version": "1.0.0",
-  "description": "App Embryon para integração com ChatGPT",
-  "main": "appmain.js",
+  "description": "App Embryon para integração com o ChatGPT",
+  "main": "app_main.js",
   "scripts": {
-    "start": "node appmain.js"
+    "start": "node app_main.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.18.2"
+  },
   "author": "Douglas",
   "license": "ISC"
 }
