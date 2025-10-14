@@ -1,0 +1,6 @@
+ {
+  "ultimoEstado": "ativo",
+  "demosIngeridos": ["demo1.txt", "demo2.txt", "demo3.txt", "demo4.txt", "demo5.txt", "demo6.txt"],
+  "mensagemInicial": "Embrião operacional e aguardando integração com a ponte API.",
+  "sincronizado": false
+}
