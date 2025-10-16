@@ -1,52 +1,52 @@
-/**
- * app-main.js
- * Embryon - integração completa com OpenAI GPT-5
- * Node.js + Render compatível
- */
+// appmain.js - Versão Final Integrada
 
-import OpenAI from "openai"; // Importa SDK oficial OpenAI
-import express from "express"; // Para criar um servidor HTTP simples
-import bodyParser from "body-parser";
+// Importações
+import express from 'express';
+import bodyParser from 'body-parser';
+import { enviarParaAPI } from './bridge.js';
+import { handleJSON } from './jonson.js';
+import OpenAI from 'openai';
 
-// --- Configurações básicas ---
+// Configurações do Express
 const app = express();
+const PORT = process.env.PORT || 10000; // Porta padrão ou variável do Render
 app.use(bodyParser.json());
 
-// Porta padrão (Render define via variável de ambiente PORT)
-const PORT = process.env.PORT || 10000;
-
-// --- Configuração do OpenAI ---
-const client = new OpenAI({
+// Inicialização do OpenAI usando Environment Variable
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// --- Função para enviar mensagens para OpenAI ---
-async function enviarParaOpenAI(mensagem) {
+// Endpoint de teste básico
+app.post('/mensagem', async (req, res) => {
+  const { mensagem } = req.body;
+
   try {
-    const response = await client.responses.create({
-      model: "gpt-5-mini",
+    // Envia para função do Bridge
+    enviarParaAPI(mensagem);
+
+    // Chamada ao OpenAI
+    const response = await openai.responses.create({
+      model: 'gpt-5-mini',
       input: mensagem
     });
-    console.log(`Mensagem enviada para OpenAI: "${mensagem}"`);
-    console.log("Resposta recebida:", response.output_text || response.output[0]?.content[0]?.text || "Sem resposta");
-    return response.output_text || "Sem resposta";
-  } catch (error) {
-    console.error("Erro ao enviar para OpenAI:", error.message || error);
-    return `Erro: ${error.message || error}`;
+
+    // Processa retorno do Jonson
+    const processed = handleJSON(response);
+
+    res.json({ success: true, resposta: processed });
+  } catch (err) {
+    console.error('Erro no processamento da mensagem:', err);
+    res.status(500).json({ success: false, erro: err.message });
   }
-}
-
-// --- Endpoint de teste ---
-app.post("/api/mensagem", async (req, res) => {
-  const { mensagem } = req.body;
-  if (!mensagem) return res.status(400).json({ error: "Mensagem não enviada" });
-
-  const resposta = await enviarParaOpenAI(mensagem);
-  res.json({ resposta });
 });
 
-// --- Inicia servidor ---
+// Endpoint para teste simples
+app.get('/teste', (req, res) => {
+  res.send('Servidor Embryon rodando. Conectado ao OpenAI!');
+});
+
+// Inicialização do servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
-  console.log("Use POST /api/mensagem para testar a integração com OpenAI");
 });
