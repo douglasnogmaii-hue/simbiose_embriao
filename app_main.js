@@ -1,18 +1,13 @@
-// app-main.js - versão final para Render
-const express = require('express');
-const { enviarParaAPI } = require('./bridge.js'); // import da função do bridge
+import OpenAI from "openai";
 
-const app = express();
-const PORT = process.env.PORT || 10000;
-
-// Rota de teste
-app.get('/', (req, res) => {
-  res.send('Olá, aqui é o Embryon fazendo um teste!');
-  console.log('Mensagem enviada para API: Olá, aqui é o Embryon fazendo um teste');
-  enviarParaAPI('Olá, aqui é o Embryon fazendo um teste'); // envia para API simulada
+const openai = new OpenAI({
+  apiKey: "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",
 });
 
-// Inicializa o servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+const response = openai.responses.create({
+  model: "gpt-5-nano",
+  input: "write a haiku about ai",
+  store: true,
 });
+
+response.then((result) => console.log(result.output_text));
