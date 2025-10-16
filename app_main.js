@@ -1,13 +1,26 @@
+import express from "express";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: "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",
+const app = express();
+const port = process.env.PORT || 10000;
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
 });
 
-const response = openai.responses.create({
-  model: "gpt-5-nano",
-  input: "write a haiku about ai",
-  store: true,
+app.get("/", async (req, res) => {
+  try {
+    const completion = await client.responses.create({
+      model: "gpt-5",
+      input: "Olá! Aqui é o Embrião realizando um teste de integração."
+    });
+    res.send(completion.output_text);
+  } catch (error) {
+    console.error("Erro ao conectar à OpenAI:", error);
+    res.status(500).send("Erro ao conectar à OpenAI.");
+  }
 });
 
-response.then((result) => console.log(result.output_text));
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
