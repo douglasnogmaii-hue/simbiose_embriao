@@ -1,26 +1,22 @@
-// jonson.js
-// Módulo responsável por intermediar chamadas para o bridge e log de mensagens
+// jonson.js - Versão Final Revisada
 
-// Importa a função do bridge
-import { enviarParaAPI } from "./bridge.js";
-
-// Função principal de envio de mensagens via API
-export function processarMensagem(mensagem) {
-    if (!mensagem || typeof mensagem !== "string") {
-        console.error("Mensagem inválida:", mensagem);
-        return;
+// Função para processar respostas JSON de forma segura
+export function handleJSON(response) {
+  try {
+    // Caso venha como string JSON
+    if (typeof response === 'string') {
+      return JSON.parse(response);
     }
 
-    try {
-        // Chama o bridge para enviar a mensagem
-        enviarParaAPI(mensagem);
-        console.log(`Mensagem processada e enviada: [${mensagem}]`);
-    } catch (erro) {
-        console.error("Erro ao enviar para API:", erro);
+    // Se já for objeto, retorna direto
+    if (typeof response === 'object' && response !== null) {
+      return response;
     }
+
+    // Se não for nenhum dos dois, retorna mensagem de erro
+    return { error: 'Resposta inválida' };
+  } catch (err) {
+    console.error('Erro ao processar JSON:', err);
+    return { error: 'Falha ao processar JSON' };
+  }
 }
-
-// Função auxiliar para testes rápidos
-export function testarProcessamento() {
-    const exemplo = "Olá, aqui é o Embryon fazendo um teste!";
-    processarMensagem(exemplo);
