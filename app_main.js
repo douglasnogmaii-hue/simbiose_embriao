@@ -1,18 +1,27 @@
-// app_main.js
-// Versão estável para Render + GitHub
-// Ponte com bridge.js para envio de mensagens à API
+// Importa funções do bridge.js
+const { enviarParaAPI } = require('./bridge.js');
+const express = require('express');
+const app = express();
 
-const { enviarParaAPI } = require("./bridge.js");
-
-// Função principal de inicialização
+// Inicialização do Embryon
 function inicializarApp() {
-  console.log("Aplicativo iniciando...");
-  enviarParaAPI("Olá, aqui é o Embryon fazendo um teste.");
-  console.log("Aplicativo iniciado com sucesso.");
+  console.log('Aplicativo inicializando...');
+  
+  // Teste de envio para API
+  enviarParaAPI('Olá, aqui é o Embryon fazendo um teste');
+  console.log('Aplicativo iniciado com sucesso.');
 }
 
-// Inicia o app
+// Chama a inicialização
 inicializarApp();
 
-// Mantém o processo ativo (impede 'Exited Early')
-setInterval(() => {}, 1000);
+// Configura servidor para Render
+const PORT = process.env.PORT || 3000; // Render define a porta
+app.get('/', (req, res) => {
+  res.send('Embryon está vivo e funcionando!');
+});
+
+// Inicia o servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
