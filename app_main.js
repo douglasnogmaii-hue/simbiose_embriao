@@ -1,15 +1,18 @@
-// app_main.js
-// Versão simplificada para integração com bridge.js
+// app-main.js - versão final para Render
+const express = require('express');
+const { enviarParaAPI } = require('./bridge.js'); // import da função do bridge
 
-// Importa a função do bridge.js
-const { enviar_para_API } = require('./bridge.js');
+const app = express();
+const PORT = process.env.PORT || 10000;
 
-// Função de inicialização do app
-function inicializar_app() {
-    console.log("Aplicativo iniciando...");
-    enviar_para_API("Olá, aqui é o Embryon fazendo um teste");
-    console.log("Aplicativo iniciado com sucesso.");
-}
+// Rota de teste
+app.get('/', (req, res) => {
+  res.send('Olá, aqui é o Embryon fazendo um teste!');
+  console.log('Mensagem enviada para API: Olá, aqui é o Embryon fazendo um teste');
+  enviarParaAPI('Olá, aqui é o Embryon fazendo um teste'); // envia para API simulada
+});
 
-// Chama a função de inicialização
-inicializar_app();
+// Inicializa o servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
