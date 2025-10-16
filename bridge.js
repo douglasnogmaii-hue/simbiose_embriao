@@ -1,8 +1,10 @@
 // bridge.js
-// Função para enviar mensagens para API (simulada)
-function enviarParaAPI(mensagem) {
+// Função de envio simulada para a API
+
+function enviar_para_API(mensagem) {
+    // Simulação de envio
     console.log(`Mensagem enviada para API: ${mensagem}`);
 }
 
-// Exporta para uso externo
-module.exports = { enviarParaAPI };
+// Exporta a função para uso externo
+module.exports = { enviar_para_API };
