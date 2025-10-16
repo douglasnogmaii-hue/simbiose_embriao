@@ -1,14 +1,63 @@
-{
-  "name": "embryon",
-  "version": "1.0.0",
-  "description": "Conexão entre Embrião e GPT",
-  "main": "app_main.js",
-  "type": "module",
-  "scripts": {
-    "start": "node app_main.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "openai": "^4.67.3"
+/**
+ * jonson.js
+ * Embryon - módulo de armazenamento de mensagens
+ * Integração com bridge.js para envio e leitura
+ */
+
+import { enviarParaAPI } from "./bridge.js"; // Importa função de envio
+
+// Simulação de banco de dados em memória
+const mensagens = [];
+
+/**
+ * Armazena uma nova mensagem localmente e envia para API
+ * @param {string} mensagem
+ */
+export async function adicionarMensagem(mensagem) {
+  if (!mensagem) {
+    console.error("Não é possível adicionar mensagem vazia");
+    return;
   }
+
+  mensagens.push({ texto: mensagem, data: new Date() });
+
+  // Envia para API através do bridge
+  const resposta = await enviarParaAPI(mensagem);
+
+  // Armazena a resposta também
+  if (resposta) {
+    mensagens.push({ texto: resposta, data: new Date(), resposta: true });
+  }
+
+  return resposta;
+}
+
+/**
+ * Retorna todas as mensagens armazenadas
+ */
+export function listarMensagens() {
+  return mensagens.map((m) => ({
+    texto: m.texto,
+    data: m.data.toISOString(),
+    resposta: !!m.resposta
+  }));
+}
+
+/**
+ * Limpa todas as mensagens armazenadas
+ */
+export function limparMensagens() {
+  mensagens.length = 0;
+  console.log("Todas as mensagens foram apagadas do jonson.js");
+  return true;
+}
+
+// --- Exemplo rápido de teste ---
+if (import.meta.url === process.argv[1] || import.meta.url === `file://${process.argv[1]}`) {
+  (async () => {
+    console.log("Testando jonson.js...");
+    const resp = await adicionarMensagem("Olá, Embryon testando armazenamento!");
+    console.log("Resposta da API:", resp);
+    console.log("Mensagens armazenadas:", listarMensagens());
+  })();
 }
