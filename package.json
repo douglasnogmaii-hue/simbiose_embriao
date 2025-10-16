@@ -1,63 +1,26 @@
-/**
- * jonson.js
- * Embryon - módulo de armazenamento de mensagens
- * Integração com bridge.js para envio e leitura
- */
+// jonson.js
+// Módulo responsável por intermediar chamadas para o bridge e log de mensagens
 
-import { enviarParaAPI } from "./bridge.js"; // Importa função de envio
+// Importa a função do bridge
+import { enviarParaAPI } from "./bridge.js";
 
-// Simulação de banco de dados em memória
-const mensagens = [];
+// Função principal de envio de mensagens via API
+export function processarMensagem(mensagem) {
+    if (!mensagem || typeof mensagem !== "string") {
+        console.error("Mensagem inválida:", mensagem);
+        return;
+    }
 
-/**
- * Armazena uma nova mensagem localmente e envia para API
- * @param {string} mensagem
- */
-export async function adicionarMensagem(mensagem) {
-  if (!mensagem) {
-    console.error("Não é possível adicionar mensagem vazia");
-    return;
-  }
-
-  mensagens.push({ texto: mensagem, data: new Date() });
-
-  // Envia para API através do bridge
-  const resposta = await enviarParaAPI(mensagem);
-
-  // Armazena a resposta também
-  if (resposta) {
-    mensagens.push({ texto: resposta, data: new Date(), resposta: true });
-  }
-
-  return resposta;
+    try {
+        // Chama o bridge para enviar a mensagem
+        enviarParaAPI(mensagem);
+        console.log(`Mensagem processada e enviada: [${mensagem}]`);
+    } catch (erro) {
+        console.error("Erro ao enviar para API:", erro);
+    }
 }
 
-/**
- * Retorna todas as mensagens armazenadas
- */
-export function listarMensagens() {
-  return mensagens.map((m) => ({
-    texto: m.texto,
-    data: m.data.toISOString(),
-    resposta: !!m.resposta
-  }));
-}
-
-/**
- * Limpa todas as mensagens armazenadas
- */
-export function limparMensagens() {
-  mensagens.length = 0;
-  console.log("Todas as mensagens foram apagadas do jonson.js");
-  return true;
-}
-
-// --- Exemplo rápido de teste ---
-if (import.meta.url === process.argv[1] || import.meta.url === `file://${process.argv[1]}`) {
-  (async () => {
-    console.log("Testando jonson.js...");
-    const resp = await adicionarMensagem("Olá, Embryon testando armazenamento!");
-    console.log("Resposta da API:", resp);
-    console.log("Mensagens armazenadas:", listarMensagens());
-  })();
-}
+// Função auxiliar para testes rápidos
+export function testarProcessamento() {
+    const exemplo = "Olá, aqui é o Embryon fazendo um teste!";
+    processarMensagem(exemplo);
