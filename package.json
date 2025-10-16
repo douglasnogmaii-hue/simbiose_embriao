@@ -1,15 +1,14 @@
 {
-  "name": "simbiose_embryon",
+  "name": "embryon",
   "version": "1.0.0",
-  "description": "Embryon para integração com ChatGPT",
+  "description": "Conexão entre Embrião e GPT",
   "main": "app_main.js",
+  "type": "module",
   "scripts": {
     "start": "node app_main.js"
   },
   "dependencies": {
-    "express": "4.18.2",
-    "openai": "^4.0.0"
-  },
-  "author": "Douglas",
-  "license": "ISC"
+    "express": "^4.18.2",
+    "openai": "^4.67.3"
+  }
 }
