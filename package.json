@@ -1,22 +1,15 @@
-// jonson.js - Versão Final Revisada
-
-// Função para processar respostas JSON de forma segura
-export function handleJSON(response) {
-  try {
-    // Caso venha como string JSON
-    if (typeof response === 'string') {
-      return JSON.parse(response);
-    }
-
-    // Se já for objeto, retorna direto
-    if (typeof response === 'object' && response !== null) {
-      return response;
-    }
-
-    // Se não for nenhum dos dois, retorna mensagem de erro
-    return { error: 'Resposta inválida' };
-  } catch (err) {
-    console.error('Erro ao processar JSON:', err);
-    return { error: 'Falha ao processar JSON' };
+{
+  "name": "embryon-app",
+  "version": "1.0.0",
+  "description": "Embryon para integração com ChatGPT e pesquisa de IAs",
+  "main": "app_main.js",
+  "scripts": {
+    "start": "node app_main.js"
+  },
+  "author": "Douglas",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.18.2",
+    "openai": "^5.0.0"
   }
 }
