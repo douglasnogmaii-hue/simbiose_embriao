@@ -35,3 +35,38 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
     console.log("Aplicativo iniciado com sucesso.");
 });
+// --- Rota principal (página inicial) ---
+app.get('/', (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>Embrião Conectado</title>
+        <style>
+          body {
+            background-color: #0b0b0c;
+            color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+          }
+          h1 {
+            color: #ffd700;
+            font-size: 2em;
+          }
+          p {
+            margin-top: 10px;
+            font-size: 1.1em;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>🌱 Embrião conectado com sucesso!</h1>
+        <p>Servidor ativo e sincronizado com o ChatGPT.</p>
+        <p>Endpoint: /api/chat pronto para uso.</p>
+      </body>
+    </html>
+  `);
+});
