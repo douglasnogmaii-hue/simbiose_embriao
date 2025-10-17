@@ -1,33 +1,14 @@
-// johnson.js
-// Responsável por chamadas à API do ChatGPT e processamento de dados
-
-import OpenAI from 'openai';
-import fs from 'fs';
-
-// Insira sua chave no environment ou já setada no app_main.js
-const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
-
-// Função principal de chamada ao GPT
-export async function callChatGPT(prompt) {
-    try {
-        const response = await client.responses.create({
-            model: "gpt-5-mini",
-            input: prompt
-        });
-        // Salva histórico local
-        saveHistory(prompt, response.output_text);
-        return response.output_text;
-    } catch (err) {
-        console.error('Erro na API do ChatGPT:', err);
-        throw err;
-    }
-}
-
-// Função para salvar histórico de prompts e respostas
-function saveHistory(prompt, output) {
-    const timestamp = new Date().toISOString();
-    const line = `[${timestamp}] PROMPT: ${prompt}\nRESPONSE: ${output}\n\n`;
-    fs.appendFileSync('./log/johnson_history.txt', line, 'utf8');
+{
+  "name": "embryon-app",
+  "version": "1.0.0",
+  "description": "Aplicativo principal de integração do Embrião com OpenAI.",
+  "main": "app_main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app_main.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "openai": "^4.67.3"
+  }
 }
