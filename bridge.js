@@ -1,51 +1,25 @@
-/**
- * bridge.js
- * Embryon - ponte entre o app e a OpenAI
- * Importável como módulo
- */
+// bridge.js
+// Responsável por conectar o app_main.js com johnson.js e gerenciar a comunicação
 
-import fetch from "node-fetch"; // Para fazer requisições HTTP
+import { callChatGPT } from './johnson.js';
+import fs from 'fs';
 
-// --- Função de envio para a API do Embryon ---
-export async function enviarParaAPI(mensagem) {
-  if (!mensagem) {
-    console.error("Nenhuma mensagem fornecida para enviar");
-    return;
-  }
+const logFile = './log/bridge_log.txt';
 
-  try {
-    // URL do seu servidor Render
-    const url = process.env.EMBRYON_API_URL || "http://localhost:10000/api/mensagem";
-
-    // Envia a mensagem
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ mensagem })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(`Mensagem enviada para API: "${mensagem}"`);
-      console.log("Resposta recebida:", data.resposta);
-      return data.resposta;
-    } else {
-      console.error("Erro da API:", data.error || data);
-      return `Erro da API: ${data.error || data}`;
+export async function sendMessage(message) {
+    try {
+        const response = await callChatGPT(message);
+        logMessage(`Mensagem enviada: ${message}`);
+        logMessage(`Resposta recebida: ${response}`);
+        return response;
+    } catch (err) {
+        logMessage(`Erro ao enviar mensagem: ${err}`);
+        throw err;
     }
-
-  } catch (error) {
-    console.error("Falha ao enviar para API:", error.message || error);
-    return `Erro: ${error.message || error}`;
-  }
 }
 
-// --- Exemplo de uso rápido ---
-if (import.meta.url === process.argv[1] || import.meta.url === `file://${process.argv[1]}`) {
-  (async () => {
-    await enviarParaAPI("Olá, aqui é o Embryon fazendo um teste");
-  })();
+function logMessage(text) {
+    const timestamp = new Date().toISOString();
+    const line = `[${timestamp}] ${text}\n`;
+    fs.appendFileSync(logFile, line, 'utf8');
 }
